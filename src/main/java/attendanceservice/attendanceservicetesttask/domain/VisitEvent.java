@@ -9,8 +9,8 @@ import java.util.Objects;
 @Table(name = "visit_events")
 public class VisitEvent implements Serializable {
     @Id
-    @Column(name = "id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "page_id", nullable = false)
     private WebPage page;
@@ -22,7 +22,7 @@ public class VisitEvent implements Serializable {
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
-    private VisitEvent(){}
+    protected VisitEvent(){}
 
     public VisitEvent(WebPage page, User user, Date eventDate) {
         if(page == null)
@@ -37,10 +37,10 @@ public class VisitEvent implements Serializable {
         this.createdAt = new Date();
     }
 
-    public String getId() { return id; }
+    public Long getId() { return id; }
 
     //For Hibernate only
-    private void setId(String id) { this.id = id; }
+    private void setId(Long id) { this.id = id; }
 
     public WebPage getPage() { return page; }
 

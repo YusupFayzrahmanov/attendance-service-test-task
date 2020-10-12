@@ -1,9 +1,6 @@
 package attendanceservice.attendanceservicetesttask.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -12,8 +9,10 @@ import java.util.Objects;
 @Table(name = "web_pages")
 public class WebPage implements Serializable {
     @Id
-    @Column(name = "id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "external_id")
+    private Long externalId;
     @Column(name = "name")
     private String name;
     @Column(name = "last_update", nullable = false)
@@ -21,21 +20,28 @@ public class WebPage implements Serializable {
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
-    private WebPage(){}
+    protected WebPage(){}
 
-    public WebPage(String id, String name){
-        if(id == null || id.isEmpty())
-            throw new IllegalArgumentException("Id is null or empty");
-        this.id = id;
+    protected WebPage(Long externalId, String name){
+        this.externalId = externalId;
         this.name = name;
         this.createdAt = new Date();
         this.lastUpdate = createdAt;
     }
 
-    public String getId() { return id; }
+    public static WebPage createFromExternal(Long externalId){
+        return new WebPage(externalId, null);
+    }
+
+    public Long getId() { return id; }
 
     //For Hibernate only
-    private void setId(String id) { this.id = id; }
+    private void setId(Long id) { this.id = id; }
+
+    public Long getExternalId() { return externalId; }
+
+    //For Hibernate only
+    private void setExternalId(Long externalId) { this.externalId = externalId; }
 
     public String getName() { return name; }
 

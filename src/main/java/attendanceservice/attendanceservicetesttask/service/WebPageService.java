@@ -5,6 +5,7 @@ import attendanceservice.attendanceservicetesttask.domain.WebPage;
 import java.util.List;
 
 public interface WebPageService {
-    WebPage getOne(String id);
+    WebPage getOne(Long id);
     WebPage create(WebPage webPage);
+    WebPage getOneByExternalIdOrCreateIfNotExists(Long id);
 }
