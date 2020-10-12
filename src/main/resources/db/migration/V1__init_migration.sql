@@ -100,3 +100,5 @@ alter table visit_events
 	add constraint visit_events_pk
 		primary key (id);
 
+INSERT INTO users(username, password, role_id, deleted, last_update, created_at) VALUES ('admin', '21232f297a57a5a743894a0e4a801fc3', 1, false, now(), now());
+INSERT INTO users(username, password, role_id, deleted, last_update, created_at) VALUES ('user', 'ee11cbb19052e40b07aac0ca060c23ee', 2, false, now(), now());
