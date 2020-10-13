@@ -10,6 +10,7 @@ import attendanceservice.attendanceservicetesttask.web.DTO.StatisticVisitEventDT
 import attendanceservice.attendanceservicetesttask.web.DTO.UniqueVisitPageDTO;
 import attendanceservice.attendanceservicetesttask.web.DTO.VisitEventConverter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +44,7 @@ public class AttendanceServiceRestControllerV1 {
                 .createVisitEvent(requestUser, requestBody.getExternalPageId(), new Date());
         Map<WebPage, Integer> userWebPages = visitEventService
                 .getUserUniqueVisitEventCountForEveryPage(requestUser);
-        return ResponseEntity.ok(userWebPages.entrySet().stream()
+        return ResponseEntity.status(HttpStatus.CREATED).body(userWebPages.entrySet().stream()
                 .map(VisitEventConverter::convertFromPageMap).collect(Collectors.toList()));
     }
 

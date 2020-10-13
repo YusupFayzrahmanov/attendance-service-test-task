@@ -18,13 +18,10 @@ import java.util.stream.Collectors;
 @Transactional
 public class VisitEventServiceImpl implements VisitEventService {
     private VisitEventRepository visitEventRepository;
-    private UserService userService;
     private WebPageService webPageService;
 
-    public VisitEventServiceImpl(VisitEventRepository visitEventRepository,
-                                 UserService userService, WebPageService webPageService) {
+    public VisitEventServiceImpl(VisitEventRepository visitEventRepository,WebPageService webPageService) {
         this.visitEventRepository = visitEventRepository;
-        this.userService = userService;
         this.webPageService = webPageService;
     }
     @Override
