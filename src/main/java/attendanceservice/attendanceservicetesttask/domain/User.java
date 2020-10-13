@@ -18,15 +18,15 @@ public class User implements Serializable {
     private Long id;
     @Column(name = "external_id", unique = true)
     private Long externalId;
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true, length = 64)
     private String username;
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 128)
     private String password;
-    @Column(name = "name")
+    @Column(name = "name", length = 64)
     private String name;
-    @Column(name = "patronymic")
+    @Column(name = "patronymic", length = 64)
     private String patronymic;
-    @Column(name = "surname")
+    @Column(name = "surname", length = 64)
     private String surname;
     @Column(name = "role_id", nullable = false, columnDefinition = "int8")
     @Enumerated(EnumType.ORDINAL)

@@ -13,7 +13,7 @@ public class WebPage implements Serializable {
     private Long id;
     @Column(name = "external_id", unique = true)
     private Long externalId;
-    @Column(name = "name")
+    @Column(name = "name", length = 128)
     private String name;
     @Column(name = "last_update", nullable = false)
     private Date lastUpdate;

@@ -39,7 +39,7 @@ public class VisitEventServiceImpl implements VisitEventService {
     @Async
     public CompletableFuture<VisitEvent> createVisitEvent(User user, Long externalPageId, Date eventDate)
             throws InterruptedException {
-        //Для моделирования сложной и долгой операции
+        //Моделирование сложной и долгой операции для демонстрации асинхронности
         Thread.sleep(10000);
         WebPage webPage = webPageService.getOneByExternalIdOrCreateIfNotExists(externalPageId);
         return CompletableFuture.completedFuture(createVisitEvent(user, webPage, eventDate));
