@@ -9,14 +9,20 @@ import attendanceservice.attendanceservicetesttask.web.DTO.CreateVisitRequestDTO
 import attendanceservice.attendanceservicetesttask.web.DTO.StatisticVisitEventDTO;
 import attendanceservice.attendanceservicetesttask.web.DTO.UniqueVisitPageDTO;
 import attendanceservice.attendanceservicetesttask.web.DTO.VisitEventConverter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,27 +37,29 @@ public class AttendanceServiceRestControllerV1 {
     }
 
     @PostMapping()
-    public ResponseEntity<List<UniqueVisitPageDTO>> createVisitEvent(@RequestBody @Valid CreateVisitRequestDTO requestBody) {
+    public ResponseEntity<List<UniqueVisitPageDTO>> createVisitEvent(@RequestBody @Valid CreateVisitRequestDTO requestBody) throws Exception {
         User requestUser = userService.getOneByExternalIdOrCreateIfNotExist(requestBody.getExternalUserId());
-        VisitEvent visitEvent = visitEventService
-                .createVisitEvent(requestUser.getId(), requestBody.getExternalPageId(), new Date());
+        CompletableFuture<VisitEvent> visitEvent = visitEventService
+                .createVisitEvent(requestUser, requestBody.getExternalPageId(), new Date());
         Map<WebPage, Integer> userWebPages = visitEventService
                 .getUserUniqueVisitEventCountForEveryPage(requestUser);
         return ResponseEntity.ok(userWebPages.entrySet().stream()
                 .map(VisitEventConverter::convertFromPageMap).collect(Collectors.toList()));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/statistics")
-    public ResponseEntity<StatisticVisitEventDTO> getVisitEventStatistics(@RequestParam(name ="start_date") @NotNull Date startDate,
-                                                                          @RequestParam(name = "end_date") @NotNull Date endDate,
-                                                                          @RequestParam(name = "user_id") Long externalId) {
+    public ResponseEntity<StatisticVisitEventDTO> getVisitEventStatistics(@RequestParam(name ="start_date", required = true)
+                                                                              @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                                                          @RequestParam(name = "end_date", required = true)
+                                                                          @DateTimeFormat(pattern = "yyyy-MM-dd")  Date endDate,
+                                                                          @RequestParam(name = "user_id", required = false) @Null Long externalId) {
         StatisticVisitEventDTO statisticVisitEventDTO = new StatisticVisitEventDTO();
         List<VisitEvent> visitEventsForPeriod = visitEventService.getVisitEventsForPeriod(startDate, endDate);
         statisticVisitEventDTO.setCommonCountOfVisits(visitEventsForPeriod.size());
         if(externalId == null){
-            User user = userService.getOneByExternalIdOrCreateIfNotExist(externalId);
             statisticVisitEventDTO.setCountOfUniqueUsers(visitEventService
-                    .getUserUniqueVisitEventCountForEveryPage(user).size());
+                    .getUniqueUsersForVisitEvents(visitEventsForPeriod).size());
         }
         else
             statisticVisitEventDTO.setCountOfUniqueUsers(1);

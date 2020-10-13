@@ -4,12 +4,14 @@ import attendanceservice.attendanceservicetesttask.domain.User;
 import attendanceservice.attendanceservicetesttask.domain.VisitEvent;
 import attendanceservice.attendanceservicetesttask.domain.WebPage;
 import attendanceservice.attendanceservicetesttask.repository.VisitEventRepository;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +36,13 @@ public class VisitEventServiceImpl implements VisitEventService {
 
     @Override
     @Transactional
-    public VisitEvent createVisitEvent(Long externalUserId, Long externalPageId, Date eventDate) {
-        User user = userService.getOneByExternalIdOrCreateIfNotExist(externalUserId);
+    @Async
+    public CompletableFuture<VisitEvent> createVisitEvent(User user, Long externalPageId, Date eventDate)
+            throws InterruptedException {
+        //Для моделирования сложной и долгой операции
+        Thread.sleep(10000);
         WebPage webPage = webPageService.getOneByExternalIdOrCreateIfNotExists(externalPageId);
-        return createVisitEvent(user, webPage, eventDate);
+        return CompletableFuture.completedFuture(createVisitEvent(user, webPage, eventDate));
     }
 
     @Override

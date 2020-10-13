@@ -16,7 +16,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "external_id")
+    @Column(name = "external_id", unique = true)
     private Long externalId;
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -48,7 +48,7 @@ public class User implements Serializable {
             throw new IllegalArgumentException("Password is null or empty");
         this.externalId = externalId;
         this.username = username;
-        this.password = DigestUtils.md5DigestAsHex(password.getBytes());
+        this.password = DigestUtils.md5DigestAsHex(password.getBytes()).toUpperCase();
         this.name = name;
         this.patronymic = patronymic;
         this.surname = surname;
@@ -139,7 +139,7 @@ public class User implements Serializable {
     private void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 
     public boolean passwordIsEqual(String password) {
-        return password.toUpperCase().equals(DigestUtils.md5DigestAsHex(password.getBytes()).toUpperCase());
+        return this.password.toUpperCase().equals(DigestUtils.md5DigestAsHex(password.getBytes()).toUpperCase());
     }
 
     @Override

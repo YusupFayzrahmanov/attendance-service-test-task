@@ -39,6 +39,9 @@ create unique index users_id_uindex
 create unique index users_username_uindex
 	on users (username);
 
+create unique index users_external_id_uindex
+	on users (external_id);
+
 alter table users
 	add constraint users_pk
 		primary key (id);
@@ -64,6 +67,9 @@ comment on column web_pages.name is 'Name of page';
 
 create unique index web_pages_id_uindex
 	on web_pages (id);
+
+create unique index web_pages_external_id_uindex
+	on web_pages (external_id);
 
 alter table web_pages
 	add constraint web_pages_pk
@@ -100,5 +106,5 @@ alter table visit_events
 	add constraint visit_events_pk
 		primary key (id);
 
-INSERT INTO users(username, password, role_id, deleted, last_update, created_at) VALUES ('admin', '21232f297a57a5a743894a0e4a801fc3', 1, false, now(), now());
-INSERT INTO users(username, password, role_id, deleted, last_update, created_at) VALUES ('user', 'ee11cbb19052e40b07aac0ca060c23ee', 2, false, now(), now());
+INSERT INTO public.users(username, password, role_id, deleted, last_update, created_at) VALUES ('admin', '21232F297A57A5A743894A0E4A801FC3', 1, false, now(), now());
+INSERT INTO public.users(username, password, role_id, deleted, last_update, created_at) VALUES ('user', 'EE11CBB19052E40B07AAC0CA060C23EE', 2, false, now(), now());
