@@ -2,6 +2,9 @@ package attendanceservice.attendanceservicetesttask.security;
 
 import attendanceservice.attendanceservicetesttask.domain.User;
 import attendanceservice.attendanceservicetesttask.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,11 +23,8 @@ import java.util.List;
 
 @Component
 public class BasicAuthenticationProvider implements AuthenticationProvider {
+    @Autowired
     private UserService userService;
-
-    public BasicAuthenticationProvider(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

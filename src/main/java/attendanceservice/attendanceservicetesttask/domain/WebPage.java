@@ -22,26 +22,20 @@ public class WebPage implements Serializable {
 
     protected WebPage(){}
 
-    protected WebPage(Long externalId, String name){
+    private WebPage(Long externalId, String name){
         this.externalId = externalId;
         this.name = name;
         this.createdAt = new Date();
         this.lastUpdate = createdAt;
     }
 
-    public static WebPage createFromExternal(Long externalId){
-        return new WebPage(externalId, null);
-    }
-
     public Long getId() { return id; }
 
-    //For Hibernate only
-    private void setId(Long id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
 
     public Long getExternalId() { return externalId; }
 
-    //For Hibernate only
-    private void setExternalId(Long externalId) { this.externalId = externalId; }
+    public void setExternalId(Long externalId) { this.externalId = externalId; }
 
     public String getName() { return name; }
 
@@ -53,8 +47,7 @@ public class WebPage implements Serializable {
 
     public Date getCreatedAt() { return createdAt; }
 
-    //For Hibernate only
-    private void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 
     @Override
     public boolean equals(Object o) {
@@ -67,5 +60,27 @@ public class WebPage implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public static class Builer {
+        private Long externalId;
+        private String name;
+
+        public Builer setExternalId(Long externalId) {
+            if(externalId == null || externalId.longValue() < 0L) {
+                throw new IllegalStateException("External id cannot be null or less than 0");
+            }
+            this.externalId = externalId;
+            return this;
+        }
+
+        public Builer setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public WebPage build() {
+            return new WebPage(externalId, name);
+        }
     }
 }

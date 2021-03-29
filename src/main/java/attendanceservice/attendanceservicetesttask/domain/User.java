@@ -2,6 +2,7 @@ package attendanceservice.attendanceservicetesttask.domain;
 
 
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -38,14 +39,10 @@ public class User implements Serializable {
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
-    protected User(){}
+    public User(){ }
 
-    protected User(Long externalId, String username, String password, String name,
+    private User(Long externalId, String username, String password, String name,
                  String patronymic, String surname, UserRole role) {
-        if(username == null || username.isEmpty())
-            throw new IllegalArgumentException("Username is null or empty");
-        if(password == null || password.isEmpty())
-            throw new IllegalArgumentException("Password is null or empty");
         this.externalId = externalId;
         this.username = username;
         this.password = DigestUtils.md5DigestAsHex(password.getBytes()).toUpperCase();
@@ -58,35 +55,23 @@ public class User implements Serializable {
         this.lastUpdate = createdAt;
     }
 
-    public static User createNew(String username, String password, String name,
-                                 String patronymic, String surname, UserRole role) {
-        return new User(null, username, password, name, patronymic, surname, role);
-    }
-
-    public static User createDefaultFromExternal(Long id, String username){
-        return new User(id, username, DEFAULT_PASSWORD, null, null, null, UserRole.USER);
-    }
-
     public Long getId() {
         return id;
     }
 
-    //For Hibernate only
-    private void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     public Long getExternalId() { return externalId; }
 
-    //For Hibernate only
-    private void setExternalId(Long externalId) { this.externalId = externalId; }
+    public void setExternalId(Long externalId) { this.externalId = externalId; }
 
     public String getUsername() {
         return username;
     }
 
-    //For Hibernate only
-    private void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -94,8 +79,7 @@ public class User implements Serializable {
         return password;
     }
 
-    //For Hibernate only
-    private void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -135,8 +119,7 @@ public class User implements Serializable {
 
     public Date getCreatedAt() { return createdAt; }
 
-    //For Hibernate only
-    private void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 
     public boolean passwordIsEqual(String password) {
         return this.password.toUpperCase().equals(DigestUtils.md5DigestAsHex(password.getBytes()).toUpperCase());
@@ -171,5 +154,57 @@ public class User implements Serializable {
         public int getId() { return id; }
 
         public String getName() { return name; }
+    }
+
+    public static class Builder {
+        private Long externalId;
+        private String username;
+        private String password;
+        private String name;
+        private UserRole role;
+
+        public Builder setExternalId(Long externalId) {
+            if(externalId == null || externalId.longValue() < 0L) {
+                throw new IllegalStateException("External id cannot be null or less than 0");
+            }
+            this.externalId = externalId;
+            return this;
+        }
+
+        public Builder setUsername(String username) {
+            if(StringUtils.isEmpty(username)) {
+                throw new IllegalStateException("Username cannot be null");
+            }
+            this.username = username;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            if(StringUtils.isEmpty(password)) {
+                throw new IllegalStateException("Password cannot be null");
+            }
+            this.password = password;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setRole(UserRole role) {
+            this.role = role;
+            return this;
+        }
+
+        public User build() {
+            return new User(externalId, username, password, name, null, null, role);
+        }
+
+        public User buildDefaultWithExternalIdAndUsername(Long externalId, String username){
+            setExternalId(externalId);
+            setUsername(username);
+            return new User(this.externalId, this.username, DEFAULT_PASSWORD, null, null, null, UserRole.USER);
+        }
     }
 }

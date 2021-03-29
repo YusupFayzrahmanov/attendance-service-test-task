@@ -1,4 +1,4 @@
-package attendanceservice.attendanceservicetesttask.web.DTO;
+package attendanceservice.attendanceservicetesttask.controller.DTO;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

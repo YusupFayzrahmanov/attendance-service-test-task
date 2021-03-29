@@ -1,11 +1,15 @@
 package attendanceservice.attendanceservicetesttask.service;
 
 import attendanceservice.attendanceservicetesttask.domain.WebPage;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface WebPageService {
-    WebPage getOne(Long id);
-    WebPage create(WebPage webPage);
-    WebPage getOneByExternalIdOrCreateIfNotExists(Long id);
+    WebPage getByExternalId(Long externalId);
+
+    WebPage createWebPage(WebPage webPage);
+
+    WebPage getByExternalIdOrCreateIfNotExists(Long externalId);
 }
