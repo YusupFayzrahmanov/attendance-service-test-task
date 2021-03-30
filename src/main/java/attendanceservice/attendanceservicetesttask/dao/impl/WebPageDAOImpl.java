@@ -4,9 +4,11 @@ import attendanceservice.attendanceservicetesttask.dao.WebPageDAO;
 import attendanceservice.attendanceservicetesttask.dao.repository.WebPageRepository;
 import attendanceservice.attendanceservicetesttask.domain.WebPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class WebPageDAOImpl implements WebPageDAO {
     private final WebPageRepository webPageRepository;
 

@@ -40,7 +40,7 @@ public class VisitEventServiceImpl implements VisitEventService {
     public CompletableFuture<VisitEvent> createVisitEventAsync(User user, WebPage webPage, Date eventDate) {
         //Моделирование сложной и долгой операции для демонстрации асинхронности
         try {
-            TimeUnit.MINUTES.sleep(1);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

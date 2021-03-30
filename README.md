@@ -10,3 +10,5 @@ mvn spring-boot:run
 Default Users:
 admin admin
 user user
+
+http://localhost:8080/swagger-ui.html#

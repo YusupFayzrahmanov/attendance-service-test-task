@@ -6,12 +6,16 @@ import attendanceservice.attendanceservicetesttask.domain.VisitEvent;
 import attendanceservice.attendanceservicetesttask.domain.WebPage;
 import attendanceservice.attendanceservicetesttask.service.VisitEventStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
+@Transactional
 public class VisitEventStatisticsServiceImpl implements VisitEventStatisticsService {
     private final VisitEventDAO visitEventDAO;
 

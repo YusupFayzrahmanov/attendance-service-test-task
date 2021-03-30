@@ -37,7 +37,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("attendanceservice.attendanceservicetesttask.web"))
+                .apis(RequestHandlerSelectors.basePackage("attendanceservice.attendanceservicetesttask.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .securityContexts(Arrays.asList(securityContext()))

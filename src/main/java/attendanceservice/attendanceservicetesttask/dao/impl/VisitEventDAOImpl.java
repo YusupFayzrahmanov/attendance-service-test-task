@@ -5,10 +5,12 @@ import attendanceservice.attendanceservicetesttask.dao.repository.VisitEventRepo
 import attendanceservice.attendanceservicetesttask.domain.User;
 import attendanceservice.attendanceservicetesttask.domain.VisitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class VisitEventDAOImpl implements VisitEventDAO {
     private final VisitEventRepository visitEventRepository;
 
@@ -24,17 +26,17 @@ public class VisitEventDAOImpl implements VisitEventDAO {
 
     @Override
     public Long findCountForPeriod(Date startDate, Date endDate) {
-        return visitEventRepository.findCountByEventDateBetween(startDate, endDate);
+        return visitEventRepository.findCountByEventDateBetween(startDate, endDate).orElse(0L);
     }
 
     @Override
     public Long findCountOfUniqueUsersForPeriod(Date start, Date end) {
-        return visitEventRepository.findCountOfUniqueUsersForPeriod(start, end);
+        return (long) visitEventRepository.findCountOfUniqueUsersForPeriod(start, end).size();
     }
 
     @Override
     public Long findCountOfUsersWhoVisitForPeriodUniqueWebPageMoreThan(int count, Date start, Date end) {
-        return visitEventRepository.findCountOfUsersWhoVisitForPeriodUniqueWebPageMoreThan(count, start, end);
+        return (long) visitEventRepository.findCountOfUsersWhoVisitForPeriodUniqueWebPageMoreThan((long) count, start, end).size();
     }
 
     @Override

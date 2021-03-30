@@ -4,9 +4,11 @@ import attendanceservice.attendanceservicetesttask.dao.UserDAO;
 import attendanceservice.attendanceservicetesttask.dao.repository.UserRepository;
 import attendanceservice.attendanceservicetesttask.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class UserDAOImpl implements UserDAO {
     private final UserRepository userRepository;
 
